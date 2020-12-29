@@ -1,15 +1,19 @@
-import React from 'react'
-import { View, Text, StyleSheet, Button } from 'react-native'
+import React from 'react';
+import { View, StyleSheet, Button } from 'react-native';
 
+import BodyText from '../components/bodyText';
+import TitleText from '../components/titleText';
+
+// GAME OVER COMPONENT
 function GameOverScreen({ roundsNumber, userNumber, onRestart }) {
 	return (
 		<View style={styles.screen}>
-			<Text>The Game is Over</Text>
-			<Text>Number of rounds: {roundsNumber}</Text>
-			<Text>Number was: {userNumber}</Text>
+			<TitleText>The Game is Over</TitleText>
+			<BodyText>Number of rounds: {roundsNumber}</BodyText>
+			<BodyText>Number was: {userNumber}</BodyText>
 			<Button title="NEW GAME" onPress={onRestart} />
 		</View>
-	)
+	);
 }
 
 // GAME OVER STYLESHEET
@@ -19,6 +23,6 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
-})
+});
 
-export default GameOverScreen
+export default GameOverScreen;

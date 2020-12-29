@@ -1,37 +1,39 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import {
 	View,
-	Text,
 	StyleSheet,
 	Button,
 	TouchableWithoutFeedback,
 	Keyboard,
 	Alert,
-} from 'react-native'
-import Card from '../components/card'
-import Input from '../components/input'
-import NumberContainer from '../components/numberContainer'
-import COLORS from '../constants/colors'
+} from 'react-native';
+
+import Card from '../components/card';
+import Input from '../components/input';
+import NumberContainer from '../components/numberContainer';
+import BodyText from '../components/bodyText';
+import TitleText from '../components/titleText';
+import COLORS from '../constants/colors';
 
 // START GAME COMPONENT
 function StartGameScreen({ onStartGame }) {
-	const [enteredValue, setEnteredValue] = useState('')
-	const [confirmed, setConfirmed] = useState(false)
-	const [selectedNumber, setSelectedNumber] = useState('')
+	const [enteredValue, setEnteredValue] = useState('');
+	const [confirmed, setConfirmed] = useState(false);
+	const [selectedNumber, setSelectedNumber] = useState('');
 
 	const numberInputHandler = inputText => {
 		// remove all non numeric values
-		setEnteredValue(inputText.replace(/[^0-9]/g, ''))
-	}
+		setEnteredValue(inputText.replace(/[^0-9]/g, ''));
+	};
 
 	const resetInputHandler = () => {
-		setEnteredValue('')
-		setConfirmed(false)
-	}
+		setEnteredValue('');
+		setConfirmed(false);
+	};
 
 	const confirmInputHandler = () => {
 		// input validation
-		const chosenNumber = parseInt(enteredValue)
+		const chosenNumber = parseInt(enteredValue);
 		if (isNaN(chosenNumber) || chosenNumber <= 0 || chosenNumber > 99) {
 			Alert.alert('Invalid number!', 'Enter a number from 1 to 99.', [
 				{
@@ -39,29 +41,29 @@ function StartGameScreen({ onStartGame }) {
 					style: 'destructive',
 					onPress: resetInputHandler,
 				},
-			])
-			return
+			]);
+			return;
 		}
 
-		setConfirmed(true)
-		setSelectedNumber(chosenNumber)
-		setEnteredValue('')
-		Keyboard.dismiss()
-	}
+		setConfirmed(true);
+		setSelectedNumber(chosenNumber);
+		setEnteredValue('');
+		Keyboard.dismiss();
+	};
 
-	let confirmedOutput
+	let confirmedOutput;
 
 	if (confirmed) {
 		confirmedOutput = (
 			<Card style={styles.summaryContainer}>
-				<Text>You Selected</Text>
+				<TitleText>You Selected</TitleText>
 				<NumberContainer>{selectedNumber}</NumberContainer>
 				<Button
 					title="START GAME"
 					onPress={() => onStartGame(selectedNumber)}
 				/>
 			</Card>
-		)
+		);
 	}
 
 	// TouchableWithoutFeeback is used as a hacky solution to remove the keyboard
@@ -69,13 +71,13 @@ function StartGameScreen({ onStartGame }) {
 	return (
 		<TouchableWithoutFeedback
 			onPress={() => {
-				Keyboard.dismiss()
+				Keyboard.dismiss();
 			}}
 		>
 			<View style={styles.screen}>
-				<Text style={styles.title}>Start a New Game!</Text>
+				<TitleText style={styles.title}>Start a New Game!</TitleText>
 				<Card style={styles.inputContainer}>
-					<Text>Select a Number</Text>
+					<BodyText>Select a Number</BodyText>
 					<Input
 						style={styles.input}
 						blurOnSubmit
@@ -105,7 +107,7 @@ function StartGameScreen({ onStartGame }) {
 				{confirmedOutput}
 			</View>
 		</TouchableWithoutFeedback>
-	)
+	);
 }
 
 // START GAME STYLESHEET
@@ -142,6 +144,6 @@ const styles = StyleSheet.create({
 		marginTop: 20,
 		alignItems: 'center',
 	},
-})
+});
 
-export default StartGameScreen
+export default StartGameScreen;

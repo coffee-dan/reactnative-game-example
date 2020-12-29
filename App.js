@@ -1,12 +1,12 @@
-import React, { useState } from 'react'
-import { StyleSheet, View } from 'react-native'
-import * as Font from 'expo-font'
-import AppLoading from 'expo-app-loading'
+import React, { useState } from 'react';
+import { StyleSheet, View } from 'react-native';
+import * as Font from 'expo-font';
+import AppLoading from 'expo-app-loading';
 
-import Header from './components/header'
-import StartGameScreen from './screens/start-game'
-import GameScreen from './screens/game'
-import GameOverScreen from './screens/game-over'
+import Header from './components/header';
+import StartGameScreen from './screens/start-game';
+import GameScreen from './screens/game';
+import GameOverScreen from './screens/game-over';
 
 // if it is needed later try to install expo-font
 // expo install expo-font // or // npm install --save expo-font
@@ -17,14 +17,14 @@ const fetchFonts = () => {
 	return Font.loadAsync({
 		'open-sans': require('./assets/fonts/OpenSans-Regular.ttf'),
 		'open-sans-bold': require('./assets/fonts/OpenSans-Bold.ttf'),
-	})
-}
+	});
+};
 
 // APP COMPONENT
 function App() {
-	const [userNumber, setUserNumber] = useState()
-	const [guessRounds, setGuessRounds] = useState(0)
-	const [dataLoaded, setDataLoaded] = useState(false)
+	const [userNumber, setUserNumber] = useState();
+	const [guessRounds, setGuessRounds] = useState(0);
+	const [dataLoaded, setDataLoaded] = useState(false);
 
 	if (!dataLoaded) {
 		return (
@@ -33,29 +33,31 @@ function App() {
 				onFinish={() => setDataLoaded(true)}
 				onError={err => console.log(err)}
 			/>
-		)
+		);
 	}
 
 	const configureNewGameHandler = () => {
 		// for restarting
-		setGuessRounds(0)
-		setUserNumber(null)
-	}
+		setGuessRounds(0);
+		setUserNumber(null);
+	};
 
 	const startGameHandler = selectedNumber => {
-		setUserNumber(selectedNumber)
-	}
+		setUserNumber(selectedNumber);
+	};
 
 	const gameOverHandler = numOfRounds => {
-		setGuessRounds(numOfRounds)
-	}
+		setGuessRounds(numOfRounds);
+	};
 
-	let content = <StartGameScreen onStartGame={startGameHandler} />
+	// default screen
+	let content = <StartGameScreen onStartGame={startGameHandler} />;
 
+	// identify game state and display correct screen
 	if (userNumber && guessRounds <= 0) {
 		content = (
 			<GameScreen userChoice={userNumber} onGameOver={gameOverHandler} />
-		)
+		);
 	} else if (guessRounds > 0) {
 		content = (
 			<GameOverScreen
@@ -63,7 +65,7 @@ function App() {
 				userNumber={userNumber}
 				onRestart={configureNewGameHandler}
 			/>
-		)
+		);
 	}
 
 	return (
@@ -71,13 +73,14 @@ function App() {
 			<Header title="Guess a Number" />
 			{content}
 		</View>
-	)
+	);
 }
 
+// APP STYLE SHEET
 const styles = StyleSheet.create({
 	screen: {
 		flex: 1,
 	},
-})
+});
 
-export default App
+export default App;
