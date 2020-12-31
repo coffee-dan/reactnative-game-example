@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, StyleSheet, Alert } from 'react-native';
+import { View, Text, StyleSheet, Alert, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 // utilizing icons built by Ionic team provided by Expo
 // always consider UI libraries such as https://github.com/GeekyAnts/NativeBase
@@ -7,6 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 import Card from '../components/card';
 import NumberContainer from '../components/numberContainer';
+import BodyText from '../components/bodyText';
 import TitleText from '../components/titleText';
 import MainButton from '../components/MainButton';
 
@@ -24,13 +25,21 @@ const generateRandomBetween = (min, max, exclude) => {
 	}
 };
 
+// LIST ITEM SUB COMPONENT
+const renderListItem = (value, numOfRound) => (
+	<View key={value} style={styles.listItem}>
+		<BodyText>Round#{numOfRound}</BodyText>
+		<BodyText>{value}</BodyText>
+	</View>
+);
+
 // GAME SCREEN COMPONENT
 function GameScreen({ userChoice, onGameOver }) {
-	const [currentGuess, setCurrentGuess] = useState(
-		generateRandomBetween(1, 100, userChoice)
-	);
-
-	const [rounds, setRounds] = useState(0);
+	const initialGuess = generateRandomBetween(1, 100, userChoice);
+	// it's safe to use a variable in the creation of these states
+	// as React knows not to reinitialize these once they already exist
+	const [currentGuess, setCurrentGuess] = useState(initialGuess);
+	const [pastGuesses, setPastGuesses] = useState([initialGuess]);
 
 	// handled seperately from component so they survive re-renders
 	// also unlike state will not force a re-render to happen
@@ -42,7 +51,7 @@ function GameScreen({ userChoice, onGameOver }) {
 	useEffect(() => {
 		if (currentGuess === userChoice) {
 			// game over
-			onGameOver(rounds);
+			onGameOver(pastGuesses.length);
 		}
 	}, [currentGuess, userChoice, onGameOver]);
 
@@ -62,7 +71,8 @@ function GameScreen({ userChoice, onGameOver }) {
 		if (direction === 'lower') {
 			currentHigh.current = currentGuess;
 		} else {
-			currentLow.current = currentGuess;
+			// +1 to exclude the lowerbound from possible guesses
+			currentLow.current = currentGuess + 1;
 		}
 
 		const nextNumber = generateRandomBetween(
@@ -72,7 +82,9 @@ function GameScreen({ userChoice, onGameOver }) {
 		);
 
 		setCurrentGuess(nextNumber);
-		setRounds(currRounds => currRounds + 1);
+		// using currentGuess here would not work as state changes are done in
+		// batches after each render
+		setPastGuesses(currPastGuesses => [nextNumber, ...currPastGuesses]);
 	};
 
 	return (
@@ -95,6 +107,13 @@ function GameScreen({ userChoice, onGameOver }) {
 					<Ionicons name="md-add" size={24} color="white" />
 				</MainButton>
 			</Card>
+			<View style={styles.list}>
+				<ScrollView>
+					{pastGuesses.map((guess, index) =>
+						renderListItem(guess, pastGuesses.length - index)
+					)}
+				</ScrollView>
+			</View>
 		</View>
 	);
 }
@@ -112,6 +131,21 @@ const styles = StyleSheet.create({
 		marginTop: 20,
 		width: 400,
 		maxWidth: '80%',
+	},
+	list: {
+		// this is required to get Android to function with ScrollView nested
+		// in View
+		flex: 1,
+		width: '80%',
+	},
+	listItem: {
+		borderColor: '#ccc',
+		borderWidth: 1,
+		padding: 15,
+		marginVertical: 10,
+		backgroundColor: 'white',
+		flexDirection: 'row',
+		justifyContent: 'space-around',
 	},
 });
 
