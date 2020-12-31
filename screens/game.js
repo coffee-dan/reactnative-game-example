@@ -4,6 +4,7 @@ import { View, StyleSheet, Button, Alert } from 'react-native';
 import Card from '../components/card';
 import NumberContainer from '../components/numberContainer';
 import TitleText from '../components/titleText';
+import MainButton from '../components/MainButton';
 
 // creating function outside of component as it does not use any data
 // from the component
@@ -74,19 +75,21 @@ function GameScreen({ userChoice, onGameOver }) {
 		<View style={styles.screen}>
 			<TitleText>Opponent's Guess</TitleText>
 			<NumberContainer>{currentGuess}</NumberContainer>
-			<Card>
-				<Button
-					title="LOWER"
+			<Card style={styles.buttonContainer}>
+				<MainButton
 					onPress={() => {
 						nextGuessHandler('lower');
 					}}
-				/>
-				<Button
-					title="GREATER"
+				>
+					LOWER
+				</MainButton>
+				<MainButton
 					onPress={() => {
 						nextGuessHandler('greater');
 					}}
-				/>
+				>
+					GREATER
+				</MainButton>
 			</Card>
 		</View>
 	);
@@ -103,7 +106,7 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'space-around',
 		marginTop: 20,
-		width: 300,
+		width: 400,
 		maxWidth: '80%',
 	},
 });

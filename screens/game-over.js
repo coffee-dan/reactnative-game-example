@@ -1,8 +1,10 @@
 import React from 'react';
-import { View, StyleSheet, Button, Image } from 'react-native';
+import { View, Text, StyleSheet, Button, Image } from 'react-native';
 
 import BodyText from '../components/bodyText';
 import TitleText from '../components/titleText';
+import MainButton from '../components/MainButton';
+import COLORS from '../constants/colors';
 
 // GAME OVER COMPONENT
 function GameOverScreen({ roundsNumber, userNumber, onRestart }) {
@@ -22,9 +24,18 @@ function GameOverScreen({ roundsNumber, userNumber, onRestart }) {
 					resizeMode="cover"
 				/>
 			</View>
-			<BodyText>Number of rounds: {roundsNumber}</BodyText>
-			<BodyText>Number was: {userNumber}</BodyText>
-			<Button title="NEW GAME" onPress={onRestart} />
+			{/* nested text components are useful 
+				styling cascades down to nested texts
+				text does not use flex, more of inline type thing*/}
+			<View style={styles.resultsContainer}>
+				<BodyText style={styles.resultText}>
+					Your phone needed{' '}
+					<Text style={styles.highlight}>{roundsNumber}</Text> rounds
+					to guess the number{' '}
+					<Text style={styles.highlight}>{userNumber}</Text>
+				</BodyText>
+			</View>
+			<MainButton onPress={onRestart}>NEW GAME</MainButton>
 		</View>
 	);
 }
@@ -48,6 +59,18 @@ const styles = StyleSheet.create({
 	image: {
 		width: '100%',
 		height: '100%',
+	},
+	resultsContainer: {
+		marginHorizontal: 30,
+		marginVertical: 15,
+	},
+	resultText: {
+		textAlign: 'center',
+		fontSize: 20,
+	},
+	highlight: {
+		color: COLORS.primary,
+		fontFamily: 'open-sans-bold',
 	},
 });
 
