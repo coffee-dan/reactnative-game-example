@@ -1,5 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, StyleSheet, Button, Alert } from 'react-native';
+import { View, StyleSheet, Alert } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+// utilizing icons built by Ionic team provided by Expo
+// always consider UI libraries such as https://github.com/GeekyAnts/NativeBase
+// can improve development process when a fully custom UI design is not needed
 
 import Card from '../components/card';
 import NumberContainer from '../components/numberContainer';
@@ -81,14 +85,14 @@ function GameScreen({ userChoice, onGameOver }) {
 						nextGuessHandler('lower');
 					}}
 				>
-					LOWER
+					<Ionicons name="md-remove" size={24} color="white" />
 				</MainButton>
 				<MainButton
 					onPress={() => {
 						nextGuessHandler('greater');
 					}}
 				>
-					GREATER
+					<Ionicons name="md-add" size={24} color="white" />
 				</MainButton>
 			</Card>
 		</View>
