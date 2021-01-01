@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, Alert, ScrollView } from 'react-native';
+import { View, StyleSheet, Alert, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 // utilizing icons built by Ionic team provided by Expo
 // always consider UI libraries such as https://github.com/GeekyAnts/NativeBase
@@ -107,12 +107,21 @@ function GameScreen({ userChoice, onGameOver }) {
 					<Ionicons name="md-add" size={24} color="white" />
 				</MainButton>
 			</Card>
-			<View style={styles.list}>
-				<ScrollView>
+			<View style={styles.listContainer}>
+				<ScrollView contentContainerStyle={styles.list}>
 					{pastGuesses.map((guess, index) =>
 						renderListItem(guess, pastGuesses.length - index)
 					)}
 				</ScrollView>
+				{/* could use FlatList like this with some changes to styling
+					and data flow but this is not necessary for this use case
+					as the list will on average not be very large */}
+				{/* <FlatList
+					contentContainerStyle={styles.list}
+					keyExtractor={item => item}
+					data={pastGuesses}
+					renderItem={renderListItem.bind(this, pastGuesses.length)}
+				/> */}
 			</View>
 		</View>
 	);
@@ -132,11 +141,18 @@ const styles = StyleSheet.create({
 		width: 400,
 		maxWidth: '80%',
 	},
-	list: {
+	listContainer: {
 		// this is required to get Android to function with ScrollView nested
 		// in View
 		flex: 1,
 		width: '80%',
+	},
+	list: {
+		// this is used instead of flex: 1 where it will take up as much space
+		// given without messing up the behavior of scrolling
+		flexGrow: 1,
+		alignItems: 'center',
+		justifyContent: 'flex-end',
 	},
 	listItem: {
 		borderColor: '#ccc',
@@ -146,6 +162,7 @@ const styles = StyleSheet.create({
 		backgroundColor: 'white',
 		flexDirection: 'row',
 		justifyContent: 'space-around',
+		width: '60%',
 	},
 });
 

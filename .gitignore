@@ -1,3 +1,7 @@
+# workspace clutter
+_clutter/
+
+# expo default
 node_modules/**/*
 .expo/*
 npm-debug.*
